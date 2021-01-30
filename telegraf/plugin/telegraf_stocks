@@ -1,0 +1,22 @@
+#!/usr/bin/env python
+import yfinance as yf
+import argparse
+import json
+
+def process(ticker=None):
+    ticker_data = yf.Ticker(ticker)
+    # return ticker_data.history(start="2021-01-25", end="2021-01-30", period="60m")
+    # return yf.download(ticker, period="5d", interval="1m")
+
+    return json.dumps(ticker_data.info)
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(
+        description="Retrieves stock information from Yahoo Finance and formats them in InfluxDB line format.")
+    parser.add_argument("--ticker", required=True,
+                        help="Ticker symbol to check on Yahoo Finance.")
+    args = parser.parse_args()
+    try:
+        print(process(ticker=args.ticker))
+    except Exception as e:
+        print(e)
